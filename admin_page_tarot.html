@@ -135,10 +135,10 @@ function mapToElements(oheng) {
 
 // ── Element display info ──
 const ELEMENT_INFO = {
-  fire:  {name:"Fire",  icon:"\u{1F525}", suit:"Wands",     color:"#e85d3a", desc:"will, drive, initiative, expansion", ko:"불"},
-  water: {name:"Water", icon:"\u{1F4A7}", suit:"Cups",      color:"#4a8ec7", desc:"emotion, intuition, bonding, depth", ko:"물"},
-  air:   {name:"Air",   icon:"\u{1F4A8}", suit:"Swords",    color:"#8ca0b8", desc:"intellect, clarity, communication, conflict", ko:"바람"},
-  earth: {name:"Earth", icon:"\u{2B50}",  suit:"Pentacles", color:"#a89060", desc:"stability, material, groundedness, form", ko:"대지"}
+  fire:  {name:"Fire",  icon:"\u2736", suit:"Wands",     color:"#e85d3a", desc:"will, drive, initiative, expansion", ko:"불"},
+  water: {name:"Water", icon:"\u25C6", suit:"Cups",      color:"#4a8ec7", desc:"emotion, intuition, bonding, depth", ko:"물"},
+  air:   {name:"Air",   icon:"\u25C7", suit:"Swords",    color:"#8ca0b8", desc:"intellect, clarity, communication, conflict", ko:"바람"},
+  earth: {name:"Earth", icon:"\u25A0",  suit:"Pentacles", color:"#a89060", desc:"stability, material, groundedness, form", ko:"대지"}
 };
 
 // ── Archetypal Directions based on oheng imbalance patterns ──
@@ -903,7 +903,7 @@ function AccountManager({currentUser,onClose}){
             React.createElement("option",{value:"admin"},"Admin"),
             React.createElement("option",{value:"staff"},"Reader")
           ),
-          React.createElement("button",{onClick:handleCreate,style:{...sty.btn,background:C.primary,color:"#fff",whiteSpace:"nowrap"}},"Generate")
+          React.createElement("button",{onClick:handleCreate,style:{...sty.btn,background:C.primary,color:"#fff",whiteSpace:"nowrap"}},"생성")
         )
       ),
 
@@ -1168,7 +1168,7 @@ function Admin({currentUser,onLogout}){
 
   function genQuestionFallback(q,sajuR,form){
     const N=form.name||"Querent";
-    return `${N}'s archetypal reading offers specific insight into this question. ${q||""} The question "${q||""}" touches on themes that are directly connected to ${N}'s core archetype and current cycle. The archetypal forces at work suggest that this area of concern is not random — it emerges from the specific pattern of energies that define ${N}'s current passage. The reading indicates that patient, strategic engagement with this question will yield better results than impulsive action. The second half of the current cycle is particularly significant for developments related to this inquiry. ${N}'s archetypal pattern favors deliberate, well-considered decisions over reactive ones in every domain.``;
+    return `${N}'s archetypal reading offers specific insight into this question. ${q||""} The question "${q||""}" touches on themes that are directly connected to ${N}'s core archetype and current cycle. The archetypal forces at work suggest that this area of concern is not random — it emerges from the specific pattern of energies that define ${N}'s current passage. The reading indicates that patient, strategic engagement with this question will yield better results than impulsive action. The second half of the current cycle is particularly significant for developments related to this inquiry. ${N}'s archetypal pattern favors deliberate, well-considered decisions over reactive ones in every domain.`;
   }
 
   useEffect(()=>()=>{},[]);
@@ -1399,7 +1399,7 @@ function Admin({currentUser,onLogout}){
         {step===2&&(<div>
           {saju&&(<div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:14,padding:24,marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-              <div style={{fontSize:14,fontWeight:800,color:C.primaryDk}}>📊 {form.name||"Querent"}님의 Archetypal Map</div>
+              <div style={{fontSize:14,fontWeight:800,color:C.primaryDk}}>📊 {form.name||"Querent"}님의 사주 원국</div>
               <div style={{display:"flex",alignItems:"center",gap:12}}>
                 {reportId&&<div style={{fontSize:11,color:"#333",fontWeight:600,fontFamily:"Consolas,Courier,monospace",letterSpacing:1,background:"#f5f2ed",padding:"3px 10px",borderRadius:6,border:`1px solid ${C.border}`}}>ID: {reportId}</div>}
                 <div style={{fontSize:12,color:C.primaryDk,fontWeight:600}}>{saju.hanja}</div>
@@ -1411,7 +1411,7 @@ function Admin({currentUser,onLogout}){
                 {p?(<div style={{display:"flex",flexDirection:"column",gap:6}}><SajuCell char={p.gan} oh={p.ohGan} yy={p.yyGan} isIlgan={isD}/><SajuCell char={p.ji} oh={p.ohJi} yy={p.yyJi}/></div>):(<div style={{display:"flex",flexDirection:"column",gap:6}}>{[0,1].map(n=><div key={n} style={{width:64,height:64,borderRadius:12,background:"#1e1a28",display:"flex",alignItems:"center",justifyContent:"center",color:C.light}}>?</div>)}</div>)}
               </div>))}
             </div>
-            <div style={{marginTop:16}}><div style={{fontSize:12,fontWeight:700,marginBottom:8}}>Elemental Distribution</div>
+            <div style={{marginTop:16}}><div style={{fontSize:12,fontWeight:700,marginBottom:8}}>오행 분포</div>
               {Object.entries(saju.oheng).map(([k,v])=>(<div key={k} style={{display:"flex",alignItems:"center",gap:8,marginBottom:5}}>
                 <span style={{width:22,height:22,borderRadius:"50%",background:ohColors[k],color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800}}>{k}</span>
                 <div style={{flex:1,height:10,background:"#1a1520",borderRadius:5,overflow:"hidden"}}><div style={{height:"100%",background:ohColors[k],borderRadius:5,width:`${Math.min(v/4*100,100)}%`}}/></div>
