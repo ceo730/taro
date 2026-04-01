@@ -280,7 +280,7 @@ const TAROT_COLORS = {
 
 
 // ══ Golden Dawn Tarot Report Configuration ══
-function defaultConfig(){const CY=new Date().getFullYear();return{systemPrompt:DEFAULT_GPT_SYSTEM,sections:[
+function defaultConfig(){const CY=new Date().getFullYear();return{configVersion:2,systemPrompt:DEFAULT_GPT_SYSTEM,sections:[
   {key:"ch1_spread",title:"카드 배열 해석",chImg:1,enabled:true,prompt:"이 사람의 타로 배열 전체를 조망하여 에너지 흐름과 핵심 카드를 해석하세요. 신뢰 형성과 몰입을 유도하는 톤으로 작성하세요.",subtopics:[
     {key:"ch1_flow",title:"전체 흐름 요약",target_chars:600,visual:"tarot_cards",prompt:"이번 배열에 나타난 전체 에너지 흐름을 설명하세요. 긍정적 요소와 주의가 필요한 요소를 균형 있게 제시하되, 읽는 사람이 '이거 내 얘기인데?'라는 느낌을 받도록 구체적으로 서술하세요."},
     {key:"ch1_core3",title:"핵심 카드 3장 집중 해석",target_chars:700,prompt:"핵심 카드 3장(현재 상태 카드, 감정 흐름 카드, 방향성 카드)을 각각 집중 해석하세요. 각 카드가 이 사람의 현재 상황에서 어떤 메시지를 전하는지 구체적으로 풀어주세요. 이미 알고 있던 감정을 건드리는 방식으로 서술하세요."},
@@ -975,11 +975,12 @@ function Admin({currentUser,onLogout}){
   const[reportId,setReportId]=useState(null);
   const[config,setConfig]=useState(()=>{
     try{
-      const saved=localStorage.getItem(CONFIG_STORE_KEY);
-      if(saved){const parsed=JSON.parse(saved);if(parsed.sections)return parsed;}
+      const CV=2;const saved=localStorage.getItem(CONFIG_STORE_KEY);
+      if(saved){const parsed=JSON.parse(saved);if(parsed.sections&&parsed.configVersion===CV)return parsed;}
       const def=localStorage.getItem(CONFIG_DEFAULT_KEY);
-      if(def){const parsed=JSON.parse(def);if(parsed.sections)return parsed;}
-      if(SHARED_CONFIG&&SHARED_CONFIG.sections)return SHARED_CONFIG;
+      if(def){const parsed=JSON.parse(def);if(parsed.sections&&parsed.configVersion===CV)return parsed;}
+      if(SHARED_CONFIG&&SHARED_CONFIG.sections&&SHARED_CONFIG.configVersion===CV)return SHARED_CONFIG;
+      localStorage.removeItem(CONFIG_STORE_KEY);localStorage.removeItem(CONFIG_DEFAULT_KEY);
     }catch(e){}
     return defaultConfig();
   });
