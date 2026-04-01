@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Load Tarot Images</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, sans-serif; background: #0d0b14; color: #e8e0d0; padding: 40px; }
+h1 { color: #c9a84c; margin-bottom: 20px; font-size: 24px; }
+.info { margin-bottom: 30px; color: #8a8494; font-size: 14px; line-height: 1.8; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.card { background: #16131f; border: 1px solid #2a2535; border-radius: 12px; padding: 16px; text-align: center; }
+.card.loaded { border-color: #6aaa6a; }
+.card h3 { font-size: 13px; color: #c9a84c; margin-bottom: 8px; }
+.card img { max-width: 100%; max-height: 120px; border-radius: 6px; margin-bottom: 8px; }
+.card .status { font-size: 11px; color: #8a8494; }
+.card.loaded .status { color: #6aaa6a; }
+input[type="file"] { display: none; }
+.upload-btn { background: #c9a84c; color: #0d0b14; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.upload-btn:hover { background: #dfc06a; }
+.bulk-btn { background: #c9a84c; color: #0d0b14; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 700; margin-bottom: 20px; }
+.bulk-btn:hover { background: #dfc06a; }
+.note { margin-top: 30px; padding: 16px; background: #1a2e1a; border: 1px solid #6aaa6a30; border-radius: 10px; font-size: 12px; color: #6aaa6a; }
+</style>
+</head>
+<body>
+<h1>Load Tarot Report Images</h1>
+<div class="info">
+  Upload tarot images for the Golden Dawn report PDF.<br>
+  Each image slot corresponds to a page in the PDF report.<br>
+  Images are stored in localStorage and persist between sessions.
+</div>
+
+<button class="bulk-btn" onclick="document.getElementById('bulkInput').click()">
+  Upload All Images at Once (select multiple files)
+</button>
+<input type="file" id="bulkInput" multiple accept="image/*" onchange="handleBulkUpload(this.files)">
+
+<div class="grid" id="grid"></div>
+
+<div class="note" id="statusNote"></div>
+
+<script>
+const PREFIX = "saju_img_";
+const slots = [
+  {key:"COVER",  label:"Cover Page",       match:["표지"]},
+  {key:"TOC",    label:"Table of Contents", match:["목차","toc"]},
+  {key:"INTRO1", label:"Intro Page 1",      match:["도입부1","intro1"]},
+  {key:"INTRO2", label:"Intro Page 2",      match:["도입부2","intro2"]},
+  {key:"INTRO3", label:"Intro Page 3",      match:["도입부3","intro3"]},
+  {key:"INTRO4", label:"Intro Page 4",      match:["도입부4","intro4"]},
+  {key:"CH1",    label:"Chapter 1 Image",   match:["타로_1장","ch1","1장"]},
+  {key:"CH2",    label:"Chapter 2 Image",   match:["타로_2장","ch2","2장"]},
+  {key:"CH3",    label:"Chapter 3 Image",   match:["타로_3장","ch3","3장"]},
+  {key:"CH4",    label:"Chapter 4 Image",   match:["타로_4장","ch4","4장"]},
+  {key:"CH5",    label:"Chapter 5 Image",   match:["타로_5장","ch5","5장"]},
+  {key:"CH6",    label:"Chapter 6 Image",   match:["타로_6장","ch6","6장"]},
+  {key:"CH7",    label:"Chapter 7 Image",   match:["타로_7장","ch7","7장"]},
+  {key:"NAEJI",  label:"Content Background",match:["내지","naeji","background"]},
+  {key:"ENDING", label:"Back Cover",        match:["뒷표지","ending","back"]}
+];
+
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  let loadedCount = 0;
+
+  slots.forEach(slot => {
+    const stored = localStorage.getItem(PREFIX + slot.key);
+    const card = document.createElement("div");
+    card.className = "card" + (stored ? " loaded" : "");
+
+    let imgHtml = "";
+    if (stored) {
+      imgHtml = `<img src="${stored}" alt="${slot.label}">`;
+      loadedCount++;
+    }
+
+    card.innerHTML = `
+      <h3>${slot.label}</h3>
+      <div style="font-size:10px;color:#8a8494;margin-bottom:6px">${slot.key}</div>
+      ${imgHtml}
+      <div class="status">${stored ? "Loaded" : "Not loaded"}</div>
+      <div style="margin-top:8px;display:flex;gap:6px;justify-content:center">
+        <input type="file" id="file_${slot.key}" accept="image/*" onchange="handleSingle('${slot.key}', this.files[0])">
+        <button class="upload-btn" onclick="document.getElementById('file_${slot.key}').click()">Upload</button>
+        ${stored ? `<button class="upload-btn" style="background:#c75c5c" onclick="removeImg('${slot.key}')">Remove</button>` : ""}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById("statusNote").textContent =
+    `${loadedCount} of ${slots.length} images loaded. Images are stored in localStorage.`;
+}
+
+function fileToBase64(file, maxWidth) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        // Resize if needed to keep localStorage manageable
+        const mw = maxWidth || 1200;
+        let w = img.width, h = img.height;
+        if (w > mw) { h = Math.round(h * mw / w); w = mw; }
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleSingle(key, file) {
+  if (!file) return;
+  const b64 = await fileToBase64(file);
+  localStorage.setItem(PREFIX + key, b64);
+  renderGrid();
+}
+
+function removeImg(key) {
+  localStorage.removeItem(PREFIX + key);
+  renderGrid();
+}
+
+async function handleBulkUpload(files) {
+  if (!files.length) return;
+
+  for (const file of files) {
+    const name = file.name.toLowerCase().replace(/\.(png|jpg|jpeg|webp)$/i, "");
+    let matched = false;
+
+    for (const slot of slots) {
+      for (const m of slot.match) {
+        if (name.includes(m.toLowerCase())) {
+          const b64 = await fileToBase64(file);
+          localStorage.setItem(PREFIX + slot.key, b64);
+          matched = true;
+          break;
+        }
+      }
+      if (matched) break;
+    }
+
+    if (!matched) {
+      console.log("No match for:", file.name);
+    }
+  }
+
+  renderGrid();
+}
+
+renderGrid();
+</script>
+</body>
+</html>
