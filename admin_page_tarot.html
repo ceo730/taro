@@ -13,15 +13,15 @@ var i=0;function t(){if(i>=u.length){j(new Error("jsPDF 로딩 실패"));return;
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;background:#0d0b14;color:#e8e0d0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;background:#f5f2ed;color:#1a1a1a;}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-textarea:focus,input:focus,select:focus{border-color:#c9a84c!important;box-shadow:0 0 0 3px rgba(201,168,76,.15)}
-.sub-edit{border:1px solid #2a2535;border-radius:10px;padding:12px 14px;margin-bottom:8px;background:#16131f}
-.sub-edit:hover{border-color:#c9a84c40}
+textarea:focus,input:focus,select:focus{border-color:#8b7355!important;box-shadow:0 0 0 3px rgba(139,115,85,.15)}
+.sub-edit{border:1px solid #e0ddd8;border-radius:10px;padding:12px 14px;margin-bottom:8px;background:#ffffff}
+.sub-edit:hover{border-color:#8b735580}
 .sub-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.sub-title-input{border:1px solid #2a2535;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:600;flex:1;min-width:120px;background:#1e1a28;color:#e8e0d0;outline:none}
+.sub-title-input{border:1px solid #e0ddd8;border-radius:6px;padding:4px 8px;font-size:12px;font-weight:600;flex:1;min-width:120px;background:#ffffff;color:#1a1a1a;outline:none}
 .sub-chars{display:flex;align-items:center;gap:4px;font-size:10px;color:#8a8a8a}
-.sub-chars input{width:50px;border:1px solid #2a2535;border-radius:4px;padding:2px 4px;font-size:10px;text-align:center;outline:none;background:#1e1a28;color:#e8e0d0}
+.sub-chars input{width:50px;border:1px solid #e0ddd8;border-radius:4px;padding:2px 4px;font-size:10px;text-align:center;outline:none;background:#ffffff;color:#1a1a1a}
 </style>
 </head><body>
 <div id="root"></div>
@@ -44,7 +44,7 @@ const IMG_ENDING = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAkGB
 </script>
 <script type="text/babel">
 const{useState,useEffect,useRef,useCallback}=React;
-const C={bg:"#0d0b14",card:"#16131f",primary:"#c9a84c",primaryDk:"#a8882e",primaryLt:"#dfc06a",dark:"#e8e0d0",text:"#d4cdc0",light:"#8a8494",border:"#2a2535",borderLt:"#352f42",green:"#6aaa6a",greenBg:"#1a2e1a",red:"#c75c5c",redBg:"#2e1a1a",amber:"#c9a84c",amberBg:"#2e2510",blue:"#6888b5"};
+const C={bg:"#f5f2ed",card:"#ffffff",primary:"#8b7355",primaryDk:"#6b5540",primaryLt:"#a89070",dark:"#1a1a1a",text:"#333333",light:"#777777",border:"#e0ddd8",borderLt:"#eeeae5",green:"#2e8b57",greenBg:"#e8f5e9",red:"#c75c5c",redBg:"#fdecea",amber:"#c9a84c",amberBg:"#fff8e1",blue:"#6888b5"};
 
 // ══ 사주 계산 (기존 유지) ══
 const CHEONGAN=["갑","을","병","정","무","기","경","신","임","계"];
@@ -425,7 +425,7 @@ function drawPaljaCard(ctx, pillars, sajuColor, cvW, startY){
     const cx = startX + i*(cardW+cardGap);
     // Card background
     const grad = ctx.createLinearGradient(cx,y,cx,y+cardH);
-    grad.addColorStop(0,'#1a1520');
+    grad.addColorStop(0,'#e8e4de');
     grad.addColorStop(1,'#2a2035');
     ctx.fillStyle = grad;
     ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.fill();
@@ -436,11 +436,11 @@ function drawPaljaCard(ctx, pillars, sajuColor, cvW, startY){
     ctx.font='bold 24px serif';ctx.fillStyle='#c9a84c';
     ctx.fillText(c.symbol, cx+cardW/2, y+45);
     // Card name
-    ctx.font='bold 10px sans-serif';ctx.fillStyle='#e8e0d0';
+    ctx.font='bold 10px sans-serif';ctx.fillStyle='#1a1a1a';
     const name = c.card.length>14?c.card.substring(0,13)+'…':c.card;
     ctx.fillText(name, cx+cardW/2, y+75);
     // Position label
-    ctx.font='8px sans-serif';ctx.fillStyle='#8a8494';
+    ctx.font='8px sans-serif';ctx.fillStyle='#777777';
     ctx.fillText(c.position, cx+cardW/2, y+cardH-12);
   });
 
@@ -452,18 +452,18 @@ function drawPaljaCard(ctx, pillars, sajuColor, cvW, startY){
   bottomCards.forEach((c,i)=>{
     const cx = startX2 + i*(cardW+cardGap);
     const grad = ctx.createLinearGradient(cx,y,cx,y+cardH);
-    grad.addColorStop(0,'#1a1520');
+    grad.addColorStop(0,'#e8e4de');
     grad.addColorStop(1,'#2a2035');
     ctx.fillStyle = grad;
     ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.fill();
-    ctx.strokeStyle='#8a8494';ctx.lineWidth=1;
+    ctx.strokeStyle='#777777';ctx.lineWidth=1;
     ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.stroke();
     ctx.font='bold 24px serif';ctx.fillStyle='#c9a84c';
     ctx.fillText(c.symbol, cx+cardW/2, y+45);
-    ctx.font='bold 10px sans-serif';ctx.fillStyle='#e8e0d0';
+    ctx.font='bold 10px sans-serif';ctx.fillStyle='#1a1a1a';
     const name = c.card.length>14?c.card.substring(0,13)+'…':c.card;
     ctx.fillText(name, cx+cardW/2, y+75);
-    ctx.font='8px sans-serif';ctx.fillStyle='#8a8494';
+    ctx.font='8px sans-serif';ctx.fillStyle='#777777';
     ctx.fillText(c.position, cx+cardW/2, y+cardH-12);
   });
 
@@ -500,7 +500,7 @@ function drawBarChart(ctx, oheng, cvW, startY, sajuColor){
     ctx.fillStyle='#fff';ctx.font='bold 10px sans-serif';
     ctx.fillText(el.icon, x0+circR, y+barH/2+4);
     // Element name
-    ctx.fillStyle='#e8e0d0';ctx.font='bold 11px sans-serif';ctx.textAlign='left';
+    ctx.fillStyle='#1a1a1a';ctx.font='bold 11px sans-serif';ctx.textAlign='left';
     ctx.fillText(el.name, x0+circR*2+6, y+barH/2+4);
     // Bar background
     const bx=x0+labelGap;
@@ -511,7 +511,7 @@ function drawBarChart(ctx, oheng, cvW, startY, sajuColor){
     ctx.fillStyle=el.color;
     ctx.beginPath();ctx.roundRect(bx,y,w,barH,8);ctx.fill();
     // Percentage
-    ctx.textAlign='right';ctx.fillStyle='#e8e0d0';ctx.font='bold 12px sans-serif';
+    ctx.textAlign='right';ctx.fillStyle='#1a1a1a';ctx.font='bold 12px sans-serif';
     ctx.fillText(el.pct+'%',bx+maxW+35,y+barH-2);
     ctx.textAlign='center';
     y+=barH+gap;
@@ -542,7 +542,7 @@ function drawLineChart(ctx, data, title, cvW, startY, accentColor){
   ctx.font='10px sans-serif';ctx.textAlign='center';
   pts.forEach((p,i)=>{
     ctx.fillStyle=accentColor;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#8a8494';ctx.fillText(String(labels[i]),p.x,y0+chartH+15);
+    ctx.fillStyle='#777777';ctx.fillText(String(labels[i]),p.x,y0+chartH+15);
   });
   ctx.textAlign='left';
   return y0+chartH+30;
@@ -644,12 +644,12 @@ async function generatePDF(config, saju, form, progressCb, reportId){
     // 페이지별 캔버스 렌더링
     for(const page of pages){
       const cv=document.createElement('canvas');cv.width=cvW;cv.height=cvH;
-      const ctx=cv.getContext('2d');ctx.fillStyle='#0d0b14';ctx.fillRect(0,0,cvW,cvH);try{ctx.drawImage(bgImg,0,0,cvW,cvH);}catch(e){}
+      const ctx=cv.getContext('2d');ctx.fillStyle='#ffffff';ctx.fillRect(0,0,cvW,cvH);try{ctx.drawImage(bgImg,0,0,cvW,cvH);}catch(e){}
       for(const cmd of page.cmds){
         if(cmd.type==="visual_palja") drawPaljaCard(ctx,saju.pillars.filter(Boolean),sc.hex,cvW,cmd.y);
         else if(cmd.type==="visual_oheng") drawBarChart(ctx,saju.oheng,cvW,cmd.y,sc.hex);
         else if(cmd.type==="visual_chart"){const gd=genGraphData(cmd.secKey,saju);if(gd){const chartColor=cmd.secKey.startsWith("relationship")?"#4a8ec7":cmd.secKey==="cycle"?"#c9a84c":sc.hex;drawLineChart(ctx,gd,"",cvW,cmd.y,chartColor);}}
-        else{ctx.font=(cmd.isHdr?'bold ':'')+cmd.sz+'px '+FONT;ctx.fillStyle=cmd.isHdr?'#c9a84c':'#e8e0d0';ctx.fillText(cmd.text,ml,cmd.y);}
+        else{ctx.font=(cmd.isHdr?'bold ':'')+cmd.sz+'px '+FONT;ctx.fillStyle=cmd.isHdr?'#6b5540':'#1a1a1a';ctx.fillText(cmd.text,ml,cmd.y);}
       }
       const du=cv.toDataURL('image/jpeg',0.88);newPage();pdf.addImage(du,'JPEG',0,0,pw,ph);
     }
@@ -678,7 +678,7 @@ async function generatePDF(config, saju, form, progressCb, reportId){
 }
 
 // ══ UI ══
-const inputStyle={width:"100%",padding:"10px 14px",border:`1px solid ${C.border}`,borderRadius:10,fontSize:14,fontFamily:"inherit",background:"#1e1a28",color:"#e8e0d0",outline:"none"};
+const inputStyle={width:"100%",padding:"10px 14px",border:`1px solid ${C.border}`,borderRadius:10,fontSize:14,fontFamily:"inherit",background:"#ffffff",color:"#1a1a1a",outline:"none"};
 const btnP={padding:"12px 24px",border:"none",borderRadius:10,fontSize:14,fontWeight:700,background:C.primary,color:"#fff",cursor:"pointer",fontFamily:"inherit"};
 const btnS={padding:"10px 18px",border:`1px solid ${C.border}`,borderRadius:10,fontSize:13,fontWeight:600,background:"#fff",color:C.primaryDk,cursor:"pointer",fontFamily:"inherit"};
 
@@ -1179,7 +1179,7 @@ function Admin({currentUser,onLogout}){
   return(
     <div style={{fontFamily:"'Pretendard',-apple-system,'Malgun Gothic',sans-serif",background:C.bg,minHeight:"100vh"}}>
       {showAccMgr&&<AccountManager currentUser={currentUser} onClose={()=>setShowAccMgr(false)}/>}
-      <div style={{background:`linear-gradient(135deg,#1a1028,#0d0b14)`,color:"#fff",padding:"12px 24px",display:"flex",alignItems:"center",gap:10,boxShadow:"0 2px 12px rgba(0,0,0,.15)",flexWrap:"wrap"}}>
+      <div style={{background:`linear-gradient(135deg,#8b7355,#6b5540)`,color:"#fff",padding:"12px 24px",display:"flex",alignItems:"center",gap:10,boxShadow:"0 2px 12px rgba(0,0,0,.15)",flexWrap:"wrap"}}>
         <span style={{fontSize:20}}>✧</span>
         <span style={{fontSize:15,fontWeight:800,letterSpacing:1}}>Golden Dawn Tarot System</span>
         <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:10}}>
@@ -1239,54 +1239,7 @@ function Admin({currentUser,onLogout}){
               setSaju(calcSaju(y,m,d,h,mn));
             }} style={{...btnP,padding:"10px 28px",fontSize:13}}>Preview Archetypal Map</button>
           </div>
-          {saju&&step===0&&(<div style={{marginTop:14,background:C.card,border:`1px solid ${C.border}`,borderRadius:14,padding:20}}>
-            <div style={{fontSize:14,fontWeight:800,color:C.primaryDk,marginBottom:14,textAlign:"center"}}>Archetypal Energy Map</div>
-            <div style={{display:"flex",justifyContent:"center",gap:16,marginBottom:18}}>
-              {[saju.hour,saju.day,saju.month,saju.year].map((p,i)=>{
-                const labels=["Hour","Day","Month","Year"];
-                const isD=(i===1);
-                return(<div key={i} style={{textAlign:"center"}}>
-                  <div style={{fontSize:11,color:C.light,fontWeight:700,marginBottom:4}}>{labels[i]}</div>
-                  {p?(<div style={{display:"flex",flexDirection:"column",gap:6}}><SajuCell char={p.gan} oh={p.ohGan} yy={p.yyGan} isIlgan={isD}/><SajuCell char={p.ji} oh={p.ohJi} yy={p.yyJi}/></div>):(<div style={{display:"flex",flexDirection:"column",gap:6}}>{[0,1].map(n=><div key={n} style={{width:64,height:64,borderRadius:12,background:"#1e1a28",display:"flex",alignItems:"center",justifyContent:"center",color:C.light}}>?</div>)}</div>)}
-                </div>);
-              })}
-            </div>
-            <div style={{fontSize:12,color:C.light,textAlign:"center",marginBottom:10}}>일간: <strong style={{color:C.primaryDk}}>{saju.ilgan}</strong> · {saju.hanja}</div>
-            <div style={{maxWidth:340,margin:"0 auto"}}>
-              {Object.entries(saju.oheng).map(([k,v])=>(<div key={k} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
-                <span style={{width:22,height:22,borderRadius:"50%",background:ohColors[k],color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800}}>{k}</span>
-                <div style={{flex:1,height:10,background:"#1a1520",borderRadius:5,overflow:"hidden"}}><div style={{height:"100%",background:ohColors[k],borderRadius:5,width:`${Math.min(v/4*100,100)}%`}}/></div>
-                <span style={{fontSize:11,fontWeight:700,color:C.dark,width:28}}>{v.toFixed(1)}</span>
-              </div>))}
-            </div>
-          </div>)}
-          </div>
-          <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:14,padding:24,marginBottom:14}}>
-            <div style={{fontSize:15,fontWeight:800,color:C.primaryDk,marginBottom:16,paddingBottom:10,borderBottom:`1.5px solid ${C.borderLt}`}}>궁금한 질문</div>
-            {form.questions.map((q,i)=>(<div key={i} style={{display:"flex",gap:8,alignItems:"center",marginBottom:8}}>
-              <span style={{fontSize:12,fontWeight:800,color:C.primary,width:22}}>Q{i+1}</span>
-              <input placeholder="What would you like the reading to illuminate?" value={q} onChange={e=>{const qs=[...form.questions];qs[i]=e.target.value;uf("questions",qs);}} style={{...inputStyle,flex:1}}/>
-              {form.questions.length>1&&<button onClick={()=>uf("questions",form.questions.filter((_,j)=>j!==i))} style={{width:30,height:30,border:`1px solid ${C.red}40`,background:C.redBg,color:C.red,borderRadius:8,cursor:"pointer",fontSize:16}}>×</button>}
-            </div>))}
-            {form.questions.length<10&&<button onClick={()=>uf("questions",[...form.questions,""])} style={{padding:"8px 16px",border:`1.5px dashed ${C.primary}40`,background:"transparent",color:C.primary,borderRadius:8,cursor:"pointer",fontSize:12,fontWeight:600,fontFamily:"inherit"}}>+ 질문 추가</button>}
-          </div>
-
-          {/* API 키 저장 */}
-          <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:14,padding:24,marginBottom:14}}>
-            <div style={{fontSize:15,fontWeight:800,color:C.primaryDk,marginBottom:16,paddingBottom:10,borderBottom:`1.5px solid ${C.borderLt}`}}>🔑 OpenAI API 키</div>
-            {apiKeyEditing?(<div>
-              <input type="password" placeholder="sk-..." value={form.apiKey} onChange={e=>uf("apiKey",e.target.value)} style={{...inputStyle,marginBottom:8}}/>
-              <div style={{display:"flex",gap:8}}>
-                <button onClick={()=>{if(!form.apiKey||!form.apiKey.startsWith("sk-")){alert("Please enter a valid API key (starts with sk-)");return;}localStorage.setItem(APIKEY_STORE_KEY,form.apiKey);setApiKeyEditing(false);}} style={{...btnP,padding:"10px 20px",fontSize:12}}>💾 저장</button>
-                {localStorage.getItem(APIKEY_STORE_KEY)&&<button onClick={()=>{uf("apiKey",localStorage.getItem(APIKEY_STORE_KEY));setApiKeyEditing(false);}} style={{...btnS,padding:"10px 20px",fontSize:12}}>취소</button>}
-              </div>
-            </div>):(<div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-              <div style={{fontSize:13,color:C.green,fontWeight:600}}>✅ API 키 저장됨 (GPT-5.2)</div>
-              <div style={{display:"flex",gap:8}}>
-                <button onClick={()=>setApiKeyEditing(true)} style={{...btnS,padding:"6px 14px",fontSize:11}}>수정</button>
-                <button onClick={()=>{localStorage.removeItem(APIKEY_STORE_KEY);uf("apiKey","");setApiKeyEditing(true);}} style={{padding:"6px 14px",border:`1px solid ${C.red}40`,background:C.redBg,color:C.red,borderRadius:8,cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>삭제</button>
-              </div>
-            </div>)}
+          
           </div>
 
           {/* GPT 시스템 프롬프트 */}
@@ -1396,13 +1349,13 @@ function Admin({currentUser,onLogout}){
             <div style={{display:"flex",justifyContent:"center",gap:20,marginBottom:12}}>
               {[{l:"Hour",p:saju.hour},{l:"Day",p:saju.day,isD:true},{l:"Month",p:saju.month},{l:"Year",p:saju.year}].map(({l,p,isD})=>(<div key={l} style={{textAlign:"center"}}>
                 <div style={{fontSize:10,color:C.light,marginBottom:6,fontWeight:600}}>{l}</div>
-                {p?(<div style={{display:"flex",flexDirection:"column",gap:6}}><SajuCell char={p.gan} oh={p.ohGan} yy={p.yyGan} isIlgan={isD}/><SajuCell char={p.ji} oh={p.ohJi} yy={p.yyJi}/></div>):(<div style={{display:"flex",flexDirection:"column",gap:6}}>{[0,1].map(n=><div key={n} style={{width:64,height:64,borderRadius:12,background:"#1e1a28",display:"flex",alignItems:"center",justifyContent:"center",color:C.light}}>?</div>)}</div>)}
+                {p?(<div style={{display:"flex",flexDirection:"column",gap:6}}><SajuCell char={p.gan} oh={p.ohGan} yy={p.yyGan} isIlgan={isD}/><SajuCell char={p.ji} oh={p.ohJi} yy={p.yyJi}/></div>):(<div style={{display:"flex",flexDirection:"column",gap:6}}>{[0,1].map(n=><div key={n} style={{width:64,height:64,borderRadius:12,background:"#f0ede8",display:"flex",alignItems:"center",justifyContent:"center",color:C.light}}>?</div>)}</div>)}
               </div>))}
             </div>
             <div style={{marginTop:16}}><div style={{fontSize:12,fontWeight:700,marginBottom:8}}>오행 분포</div>
               {Object.entries(saju.oheng).map(([k,v])=>(<div key={k} style={{display:"flex",alignItems:"center",gap:8,marginBottom:5}}>
                 <span style={{width:22,height:22,borderRadius:"50%",background:ohColors[k],color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:800}}>{k}</span>
-                <div style={{flex:1,height:10,background:"#1a1520",borderRadius:5,overflow:"hidden"}}><div style={{height:"100%",background:ohColors[k],borderRadius:5,width:`${Math.min(v/4*100,100)}%`}}/></div>
+                <div style={{flex:1,height:10,background:"#e8e4de",borderRadius:5,overflow:"hidden"}}><div style={{height:"100%",background:ohColors[k],borderRadius:5,width:`${Math.min(v/4*100,100)}%`}}/></div>
                 <span style={{fontSize:11,fontWeight:600,width:28}}>{v.toFixed(1)}</span>
               </div>))}
             </div>
