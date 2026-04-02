@@ -255,12 +255,12 @@ function buildTarotReading(saju) {
     cycleCard, relationCard, materialCard,
     courtInner, courtSocial,
     cards: [
-      {position:"Core Archetype",     card: coreArchetype.name,  symbol: coreArchetype.symbol},
-      {position:"Current Cycle",      card: cycleCard.name,      symbol: cycleCard.symbol},
-      {position:"Relationship",       card: relationCard.name,   symbol: relationCard.suit},
-      {position:"Material Path",      card: materialCard.name,   symbol: materialCard.suit},
-      {position:"Shadow Lesson",      card: shadow.name,         symbol: shadow.symbol},
-      {position:"Integration",        card: "The World",         symbol: "XXI"}
+      {position:"Core",       word: coreArchetype.name.replace(/^The /,"")},
+      {position:"Cycle",      word: cycleCard.name.replace(/^The /,"")},
+      {position:"Relation",   word: relationCard.suit},
+      {position:"Material",   word: materialCard.suit},
+      {position:"Shadow",     word: shadow.name.replace(/^The /,"")},
+      {position:"Guidance",   word: "World"}
     ]
   };
 }
@@ -403,72 +403,50 @@ function genGraphData(secKey, saju){
 function loadImg(src){return new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=src;});}
 
 function drawPaljaCard(ctx, pillars, sajuColor, cvW, startY){
-  // Repurposed: Draw tarot card spread instead of saju pillars
-  // We use the same function signature for compatibility
   const saju = window.__currentSaju;
   if(!saju) return startY+200;
   const tarot = buildTarotReading(saju);
   const cards = tarot.cards;
-  const cardW=100, cardH=140, cardGap=16;
-  const totalW = Math.min(cards.length,3)*(cardW+cardGap)-cardGap;
+  const cardW=120, cardH=160, gap=14;
+  const cols=3, rows=2;
+  const totalW = cols*(cardW+gap)-gap;
   const startX = (cvW-totalW)/2;
   let y = startY;
 
-  // Title
-  ctx.font='bold 14px sans-serif';ctx.fillStyle='#c9a84c';ctx.textAlign='center';
-  ctx.fillText('Cards Highlighted in This Reading', cvW/2, y+12);
-  y+=28;
+  ctx.font='bold 16px sans-serif';ctx.fillStyle='#6b5540';ctx.textAlign='center';
+  ctx.fillText('Tarot Spread', cvW/2, y+14);
+  y+=32;
 
-  // Draw top row (3 cards)
-  const topCards = cards.slice(0,3);
-  topCards.forEach((c,i)=>{
-    const cx = startX + i*(cardW+cardGap);
+  const palette=['#8b7355','#6b5280','#e85d3a','#4a8ec7','#a89060','#2e8b57'];
+
+  for(let i=0;i<cards.length&&i<6;i++){
+    const row=Math.floor(i/cols), col=i%cols;
+    const cx=startX+col*(cardW+gap);
+    const cy=y+row*(cardH+gap);
+    const clr=palette[i%palette.length];
+
     // Card background
-    const grad = ctx.createLinearGradient(cx,y,cx,y+cardH);
-    grad.addColorStop(0,'#e8e4de');
-    grad.addColorStop(1,'#2a2035');
-    ctx.fillStyle = grad;
-    ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.fill();
-    // Gold border
-    ctx.strokeStyle='#c9a84c';ctx.lineWidth=1.5;
-    ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.stroke();
-    // Symbol
-    ctx.font='bold 24px serif';ctx.fillStyle='#c9a84c';
-    ctx.fillText(c.symbol, cx+cardW/2, y+45);
-    // Card name
-    ctx.font='bold 10px sans-serif';ctx.fillStyle='#1a1a1a';
-    const name = c.card.length>14?c.card.substring(0,13)+'…':c.card;
-    ctx.fillText(name, cx+cardW/2, y+75);
-    // Position label
-    ctx.font='8px sans-serif';ctx.fillStyle='#777777';
-    ctx.fillText(c.position, cx+cardW/2, y+cardH-12);
-  });
+    ctx.fillStyle='#faf8f5';
+    ctx.fillRect(cx,cy,cardW,cardH);
+    // Border
+    ctx.strokeStyle=clr;ctx.lineWidth=2;
+    ctx.strokeRect(cx,cy,cardW,cardH);
+    // Top accent line
+    ctx.fillStyle=clr;
+    ctx.fillRect(cx,cy,cardW,4);
 
-  // Bottom row (3 cards)
-  y += cardH+16;
-  const bottomCards = cards.slice(3,6);
-  const totalW2 = Math.min(bottomCards.length,3)*(cardW+cardGap)-cardGap;
-  const startX2 = (cvW-totalW2)/2;
-  bottomCards.forEach((c,i)=>{
-    const cx = startX2 + i*(cardW+cardGap);
-    const grad = ctx.createLinearGradient(cx,y,cx,y+cardH);
-    grad.addColorStop(0,'#e8e4de');
-    grad.addColorStop(1,'#2a2035');
-    ctx.fillStyle = grad;
-    ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.fill();
-    ctx.strokeStyle='#777777';ctx.lineWidth=1;
-    ctx.beginPath();ctx.roundRect(cx,y,cardW,cardH,8);ctx.stroke();
-    ctx.font='bold 24px serif';ctx.fillStyle='#c9a84c';
-    ctx.fillText(c.symbol, cx+cardW/2, y+45);
-    ctx.font='bold 10px sans-serif';ctx.fillStyle='#1a1a1a';
-    const name = c.card.length>14?c.card.substring(0,13)+'…':c.card;
-    ctx.fillText(name, cx+cardW/2, y+75);
-    ctx.font='8px sans-serif';ctx.fillStyle='#777777';
-    ctx.fillText(c.position, cx+cardW/2, y+cardH-12);
-  });
+    // Main word (large, centered)
+    ctx.font='bold 18px serif';ctx.fillStyle='#1a1a1a';
+    const word=cards[i].word||'Tarot';
+    ctx.fillText(word, cx+cardW/2, cy+cardH/2+6);
+
+    // Position label at bottom
+    ctx.font='11px sans-serif';ctx.fillStyle='#999999';
+    ctx.fillText(cards[i].position, cx+cardW/2, cy+cardH-14);
+  }
 
   ctx.textAlign='left';
-  return y+cardH+20;
+  return y+rows*(cardH+gap)+10;
 }
 
 function drawBarChart(ctx, oheng, cvW, startY, sajuColor){
